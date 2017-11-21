@@ -1,0 +1,12 @@
+*~
+*.fasl
+*.lafsl
+*.FASL
+*.~lock*
+\#*\#
+*.fas
+*.dx64fsl
+*.lx64fsl
+*.DS_Store
+.\#*
+spec/*.h
