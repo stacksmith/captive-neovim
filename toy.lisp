@@ -49,11 +49,13 @@
 (defmethod redraw-end ((vim vimtoy))
   (with-slots (dirty cells w h) vim
     (when dirty
-      (format t "~&")
+      (dotimes (i w) (format t "=" ))
+      (terpri)
       (loop for y from 0 below h do
 	   (loop for x from 0 below w do
 		(format t "~A" (aref cells y x)))
 	   (terpri))
+      (dotimes (i w) (format t "=" ))
       (setf dirty nil))
     ))
 

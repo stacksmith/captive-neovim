@@ -31,7 +31,7 @@ CN> (connect (make-instance 'vimtoy)  32 10) ;; create a 32 x 10 neovim
 CN> (updates *v*)
 CN> ...
 ...
-
+================================
 ~                               
 ~                               
 ~                               
@@ -40,11 +40,11 @@ CN> ...
 ~                               
 ~                               
 [No Name]       0,0-1        All
+================================
                                 
-T
 CN> (! "iHello World")
 CN> (updates *v*)
-CN> ...
+================================
 Hello World                     
 ~                               
 ~                               
@@ -55,6 +55,7 @@ Hello World
 ~                               
 [No Name] [+]   1,12         All
 -- INSERT --                    
+================================
 
 CN> (ql:quickload :cl-interpol)
 CN> (interpol:enable-interpol-syntax)
