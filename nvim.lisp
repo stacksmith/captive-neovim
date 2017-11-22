@@ -91,7 +91,6 @@
 
 (defmethod on-notification ((vim nvim ) s data-cnt)
   (let ((handler (parse-rpc *parser-noti* s)))
-    (format t "ON_NOTI: ~A~&" (type-of handler))
     (if handler
 	(funcall handler vim s (1- data-cnt))
 	(format t "Unhandled notification"))

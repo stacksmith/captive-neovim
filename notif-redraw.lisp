@@ -17,7 +17,7 @@ proper lisp parameters.
 
 (defparameter *parser-redraw* nil)
 (defparameter *parser-highlight* nil)
-(defparameter *parser-mis* nil);mode_info_set
+
 ;;==============================================================================
 ;; REDRAW protocol overrides
 (defgeneric redraw/resize (vim width height))
@@ -116,16 +116,17 @@ proper lisp parameters.
 
 
 ;;==============================================================================
-;; Highlight handling.
+;; Highlight           https://neovim.io/doc/user/ui.html#ui-event-highlight_set
+;;
+;; 8 highlight subcommands.  First 3 provide colors; rest are booleans.
 ;;
 (defun init-parser-highlight ()
   ;; return a symbol for the highlight type string...
   (setf *parser-highlight* (make-instance 'parser :len 10))
   (parser-load-symbolically
    *parser-highlight*
-   '("foreground" "background"   "special"
-     "reverse"    "italic"       "bold"   
-     "underline"  "undercurl" )
+   '("foreground" "background"   "special"   "reverse"
+     "italic"     "bold"         "underline"  "undercurl" )
    :prefix "HL/"))
 ;;------------------------------------------------------------------------------
 ;; highlight: 3 colors and 5 boolean keys...
@@ -137,7 +138,7 @@ proper lisp parameters.
        (*header s 'ARRAY 1)
        (explore s))
       (2
-       (*header s 'ARRAY 1)
+       (*header s 'ARRAY 1)  
        (explore s)
        (*header s 'ARRAY 1)
        (let ((cnt (*header s 'MAP)))
@@ -162,39 +163,32 @@ proper lisp parameters.
   reve:~A ital:~A bold:~A line:~A curl:~A~&" fore back spec
   reve ital bold line curl  ))
 
-;;------------------------------------------------------------------------------
+;;==============================================================================
+;; goto
 (defun %redraw/cursor_goto (vim s data-cnt)
   (check-cnt 1 data-cnt)
   (*header s 'ARRAY 2)
   (redraw/goto vim (*int s) (*int s)))
 (defmethod redraw/goto ((vim nvim) row column)
   (format t "~&:-goto: row ~A col ~A~&" row column))
-;;------------------------------------------------------------------------------
+;;==============================================================================
+;; put
 (defun %redraw/put (vim s data-cnt)
   (redraw/put vim s data-cnt))
+;;------------------------------------------------------------------------------
+;; default
 (defmethod redraw/put ((vim nvim) s data-cnt)
   (format t "~&put: ")
   (loop for i from 0 below data-cnt do
        (let ((cell-cnt (*header s 'ARRAY 1)))
 	 (format t "~S" (*string s) )))
-  (terpri)
-  )
+  (terpri))
 ;;==============================================================================
-;; modes_info_set
-(defun init-parser-mis ()
-  ;; return a symbol for the highlight type string...
-  (setf *parser-mis* (make-instance 'parser :len 10))
-  (parser-load-symbolically
-   *parser-mis* 
-   '("mouse_shape"  "cursor_shape"  "block" "horizontal" "vertical" 
-     "cell_percentage" "blinkwait" "blinkon" "blinkoff" 
-     "name" "hl_id" "id_lm" "short_name")
-   :prefix "mis/"))
+;; modes_info_set is in its own file mode-info-set.lisp
+
 ;;------------------------------------------------------------------------------
 ;; TODO: build a parser
-(defun %redraw/mode_info_set (vim s data-cnt)
-  (loop for i from 0 below data-cnt do
-       (explore s)))
+
 ;;------------------------------------------------------------------------------
 ;; TODO:
 (defun %redraw/mode_change (vim s data-cnt)

@@ -21,7 +21,7 @@ String length is generally the intended way to know what the remaining value is.
 ;;------------------------------------------------------------------------------
 ;; pack - encode (unpack?) a string as a list of characters ending in a . value
 (defun pack (name val &optional (start 0) (len (length name)))
-  (format t "~&PACKING: ~A.~S ~A~&" start name val)
+;;  (format t "~&PACKING: ~A.~S ~A~&" start name val)
   (if (zerop len)
       val
       (cons (char name start) (pack name val (1+ start) (1- len)))))
@@ -75,8 +75,14 @@ String length is generally the intended way to know what the remaining value is.
 (defclass parser ()
   ((arr :accessor arr)))
 
-(defmethod initialize-instance ((parser parser) &key (len 6))
-  (setf (arr parser) (make-array (1+ len) :initial-element nil)))
+(defmethod initialize-instance ((parser parser)
+				&key (len 6)
+				  symbolically prefix
+				  (package *package*))
+  (setf (arr parser) (make-array (1+ len) :initial-element nil))
+  (when symbolically
+    (parser-load-symbolically parser symbolically :prefix prefix
+			      :package package)))
 ;;------------------------------------------------------------------------------
 ;; add
 (defun parser-add (parser name val)
@@ -108,7 +114,7 @@ String length is generally the intended way to know what the remaining value is.
   (aref (arr parser) length))
 
 
-
+()
 ;;==============================================================================
 ;; Match the string coming from the stream against the parse tree
 (defun parse-rpc (parser s)

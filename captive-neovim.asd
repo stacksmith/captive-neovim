@@ -13,8 +13,8 @@
 	       (:file "msgpack-in")
 	       (:file "msgpack-out")
 	       (:file "parse-tree")
+	       (:file "mode-info-set")
 	       (:file "nvim")
-
 	       (:file "notif-redraw")
 	       (:file "toy")))
 
