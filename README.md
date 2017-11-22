@@ -29,8 +29,6 @@ A working 'vimtoy' implementation provides a simple demo of the wrapper.
 CN> (init)
 CN> (connect (make-instance 'vimtoy)  32 10) ;; create a 32 x 10 neovim
 CN> (updates *v*)
-CN> ...
-...
 ================================
 ~                               
 ~                               
